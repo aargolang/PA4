@@ -32,9 +32,10 @@ typedef struct node {
 	struct Node *pNext;
 } Node;
 
-void *makeNode(void *dat, int type);
+QueueData *makeQueueNode(QueueData *dat);
+Node *makeNode(char *dat);
 BOOL enqueue(Queue *pQueue, QueueData *dat);
-BOOL dequeue(Queue *pQueue);
+QueueData *dequeue(Queue *pQueue);
 
 //Node *makenode(Record *dat);
 //BOOL insertFront(List *pList, Record *dat);
