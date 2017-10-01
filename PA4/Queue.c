@@ -23,7 +23,7 @@ Node *makeNode(char *dat) {
 // precondition queue and dat are not null
 BOOL enqueue(Queue *pQueue, QueueData *dat) {
 	BOOL success = FALSE;
-	QueueNode *pMem = makeNode(dat);
+	QueueNode *pMem = makeQueueNode(dat);
 
 	if (pMem != NULL){
 		if (pQueue->isEmpty == TRUE) {

@@ -11,14 +11,17 @@ Files:			- main.c
 *********************************/
 
 #include "Queue.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <Windows.h>
+#include <time.h>
 
 int main()
 {
 	Queue normalLline = { NULL,NULL,TRUE };
 	Queue expressLine = { NULL,NULL,TRUE };
-	int time = 0;
+	int t = 0, nTimer = 0, eTimer = 0;
+	srand(time(NULL));
 
 	QueueData data1 = {1,10,13};
 	QueueData data2 = { 2,4,5 };
@@ -28,13 +31,24 @@ int main()
 	enqueue(&normalLline, &data2);
 	enqueue(&normalLline, &data3);
 
-	while(normalLline.isEmpty==FALSE){
+	while(normalLline.isEmpty == FALSE){
 		pDat = dequeue(&normalLline);
+		// free(pDat);
 	}
 
-	while (time < 1440) {
+	nTimer = (rand() % 6) + 3;
+	eTimer = (rand() % 5) + 1;
+	while (t < 500) {
+		if(t == eTimer){
+			printf("normal line at %i \n", t);
+			eTimer = (rand() % 5) + 1 + t;
+		}
+		if (t == nTimer){
+			printf("express line at %i \n", t);
+			nTimer = (rand() % 6) + 3 + t;
+		}
 
-		time++;
+		t++;
 	}
 
 
