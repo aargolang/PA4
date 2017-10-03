@@ -18,45 +18,79 @@ Files:			- main.c
 
 int main()
 {
-	Queue normalLline = { NULL,NULL,TRUE };
-	Queue expressLine = { NULL,NULL,TRUE };
-	int t = 0, nTimer = 0, eTimer = 0;
+	Queue normalLane = { NULL,NULL }, expressLane = { NULL,NULL };
+	int t = 0, n = 0, nTimer = 0, eTimer = 0, totalCustomers = 0, serviceTime = 0;
+	char userInput[50] = { '\0' };
+	QueueData *pDat = NULL;
 	srand(time(NULL));
 
-	QueueData data1 = {1,10,13};
-	QueueData data2 = { 2,4,5 };
-	QueueData data3 = { 3,2,6 };
-	QueueData *pDat = NULL;
-	enqueue(&normalLline, &data1);
-	enqueue(&normalLline, &data2);
-	enqueue(&normalLline, &data3);
-
-	while(normalLline.isEmpty == FALSE){
-		pDat = dequeue(&normalLline);
-		// free(pDat);
-	}
+	printf("how many minutes would you like to simulate?");
+	fgets(userInput, 6, stdin);
+	n = atoi(userInput);
 
 	nTimer = (rand() % 6) + 3;
 	eTimer = (rand() % 5) + 1;
-	while (t < 500) {
-		if(t == eTimer){
-			printf("normal line at %i \n", t);
-			eTimer = (rand() % 5) + 1 + t;
-		}
-		if (t == nTimer){
-			printf("express line at %i \n", t);
+	while (t < n) {
+		//enqueueing 
+		if(t == nTimer){
+			printf("customer numer %i arrives in the normal line at t = %i \n", totalCustomers, t);
 			nTimer = (rand() % 6) + 3 + t;
+			serviceTime = (rand() % 6) + 3;
+			pDat = QDconstructor(totalCustomers, serviceTime, -t);
+			enqueue(&normalLane, pDat);
+			totalCustomers++;
 		}
+		if (t == eTimer){
+			printf("customer numer %i arrives in the express line at t = %i \n", totalCustomers, t);
+			eTimer = (rand() % 5) + 1 + t;
+			serviceTime = (rand() % 5) + 1;
+			pDat = QDconstructor(totalCustomers, serviceTime, -t);
+			enqueue(&expressLane, pDat);
+			totalCustomers++;
+		}
+
+		// dequeueing
+		if (isEmpty(&normalLane) == FALSE && normalLane.pHead->qData->serviceTime == 0) {
+			// dequeue normal lane
+			printf("Customer #%i leaves the normal lane ", normalLane.pHead->qData->customerNumber);
+			printf("after %i total minutes\n", normalLane.pHead->qData->totalTime + t);
+			pDat = dequeue(&normalLane);
+			free(pDat);
+		}
+		if (isEmpty(&expressLane) == FALSE && expressLane.pHead->qData->serviceTime == 0) {
+			// dequeue express lane
+			printf("Customer #%i leaves the express lane ", expressLane.pHead->qData->customerNumber);
+			printf("after %i total minutes\n", expressLane.pHead->qData->totalTime + t);
+			pDat = dequeue(&expressLane);
+			free(pDat);
+		}
+
+		if ((t % 10) == 0 && t != 0) {
+			printf("--- Normal Lane ---\n");
+			printQueue(&normalLane, t);
+			printf("--- Express Lane ---\n");
+			printQueue(&expressLane, t);
+		}
+
+		// process customers if they exist
+		if (isEmpty(&normalLane) == FALSE)
+			normalLane.pHead->qData->serviceTime--;
+		if (isEmpty(&expressLane) == FALSE)
+			expressLane.pHead->qData->serviceTime--;
 
 		t++;
+
+		if ((t % 1440) == 0) {
+			freeQueue(&normalLane);
+			freeQueue(&expressLane);
+			nTimer = (rand() % 6) + 3 + t;
+			eTimer = (rand() % 5) + 1 + t;
+			totalCustomers = 0;
+		}
 	}
+	freeQueue(&normalLane);
+	freeQueue(&expressLane);
 
-
-
-
-	printf("customer #: %i\nservice Time: %i\ntotal time: %i\n",data1.customerNumber, data1.serviceTime, data1.totalTime);
-	// normal.enqueue(&data1);
-	printf("customer #: %i\nservice Time: %i\ntotal time: %i\n", data1.customerNumber, data1.serviceTime, data1.totalTime);
 	getchar();
 	return 0;
 }
