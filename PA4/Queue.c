@@ -1,6 +1,6 @@
 #include "Queue.h"
 
-QueueData *makeQueueNode(QueueData *dat) {
+QueueNode *makeQueueNode(QueueData *dat) {
 	QueueNode *pMem = NULL;
 	pMem = malloc(sizeof(Node));
 	if (pMem != NULL) {
@@ -86,7 +86,7 @@ void printQueue(Queue *pQueue, int time) {
 }
 
 void freeQueue(Queue *pQueue) {
-	QueueNode *pDat = NULL;
+	QueueData *pDat = NULL;
 
 	while (isEmpty(pQueue) == FALSE) {
 		pDat = dequeue(pQueue);

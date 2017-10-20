@@ -33,7 +33,7 @@ typedef struct node {
 } Node;
 
 QueueData *QDconstructor(int custNum, int servTime, int totTime);
-QueueData *makeQueueNode(QueueData *dat);
+QueueNode *makeQueueNode(QueueData *dat);
 Node *makeNode(char *dat);
 BOOL enqueue(Queue *pQueue, QueueData *dat);
 QueueData *dequeue(Queue *pQueue);

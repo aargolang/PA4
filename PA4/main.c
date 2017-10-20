@@ -22,7 +22,7 @@ int main()
 	int t = 0, n = 0, nTimer = 0, eTimer = 0, totalCustomers = 0, serviceTime = 0;
 	char userInput[50] = { '\0' };
 	QueueData *pDat = NULL;
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	printf("how many minutes would you like to simulate?");
 	fgets(userInput, 6, stdin);
